@@ -638,6 +638,13 @@ wlc_view_get_geometry(wlc_handle view)
    return get(convert_from_wlc_handle(view, "view"), offsetof(struct wlc_view, pending.geometry));
 }
 
+WLC_API void
+wlc_view_get_bounds(wlc_handle view, struct wlc_geometry* b1, struct wlc_geometry* b2)
+{
+   return wlc_view_get_bounds_ptr(convert_from_wlc_handle(view, "view"),
+      b1, b2);
+}
+
 WLC_API const struct wlc_size*
 wlc_view_positioner_get_size(wlc_handle view)
 {

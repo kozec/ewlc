@@ -438,6 +438,9 @@ enum wlc_view_properties wlc_view_get_properties(wlc_handle view);
 /** Get current geometry. (what client sees) */
 const struct wlc_geometry* wlc_view_get_geometry(wlc_handle view);
 
+/** Gets view bounds */
+void wlc_view_get_bounds(wlc_handle view, struct wlc_geometry* b1, struct wlc_geometry* b2);
+
 /**
  * Get size requested by positioner, as defined in xdg-shell v6.
  * Returns NULL if view has no valid positioner
