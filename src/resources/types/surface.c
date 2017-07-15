@@ -372,7 +372,7 @@ wlc_surface_attach_to_output(struct wlc_surface *surface, struct wlc_output *out
    struct wlc_view *view;
    if (surface->view && (view = convert_from_wlc_handle(surface->view, "view"))) {
       struct wlc_geometry g, area;
-      wlc_view_get_bounds(view, &g, &area);
+      wlc_view_get_bounds_ptr(view, &g, &area);
       surface->coordinate_transform.w = (float)(area.size.w) / size.w;
       surface->coordinate_transform.h = (float)(area.size.h) / size.h;
    } else {

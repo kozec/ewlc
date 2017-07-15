@@ -41,7 +41,7 @@ view_under_touch(const struct wlc_point *pos, struct wlc_output *output)
          continue;
 
       struct wlc_geometry b;
-      wlc_view_get_bounds(view, &b, NULL);
+      wlc_view_get_bounds_ptr(view, &b, NULL);
       if (pos->x >= b.origin.x && pos->x <= b.origin.x + (int32_t)b.size.w &&
           pos->y >= b.origin.y && pos->y <= b.origin.y + (int32_t)b.size.h) {
          return view;

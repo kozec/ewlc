@@ -167,7 +167,7 @@ wlc_view_commit_state(struct wlc_view *view, struct wlc_view_state *pending, str
    *out = *pending;
 
    struct wlc_geometry geom, visible;
-   wlc_view_get_bounds(view, &geom, &visible);
+   wlc_view_get_bounds_ptr(view, &geom, &visible);
    surface_tree_update_coordinate_transform(surface, &visible);
 
    wlc_dlog(WLC_DBG_COMMIT, "=> commit view %" PRIuWLC, convert_to_wlc_handle(view));
@@ -193,7 +193,7 @@ wlc_view_ack_surface_attach(struct wlc_view *view, struct wlc_surface *surface)
 }
 
 void
-wlc_view_get_bounds(struct wlc_view *view, struct wlc_geometry *out_bounds, struct wlc_geometry *out_visible)
+wlc_view_get_bounds_ptr(struct wlc_view *view, struct wlc_geometry *out_bounds, struct wlc_geometry *out_visible)
 {
    assert(view && out_bounds && out_bounds != out_visible);
    memcpy(out_bounds, &view->commit.geometry, sizeof(struct wlc_geometry));
@@ -261,7 +261,7 @@ wlc_view_get_opaque(struct wlc_view *view, struct wlc_geometry *out_opaque)
    assert(view && out_opaque);
 
    struct wlc_geometry b, v;
-   wlc_view_get_bounds(view, &b, &v);
+   wlc_view_get_bounds_ptr(view, &b, &v);
    return wlc_surface_get_opaque(convert_from_wlc_resource(view->surface, "surface"), &v.origin, out_opaque);
 }
 
@@ -270,7 +270,7 @@ wlc_view_get_input(struct wlc_view *view, struct wlc_geometry *out_input)
 {
    assert(view && out_input);
    struct wlc_geometry b, v;
-   wlc_view_get_bounds(view, &b, &v);
+   wlc_view_get_bounds_ptr(view, &b, &v);
 
    if (is_x11_view(view)) {
       *out_input = v;
@@ -701,7 +701,7 @@ wlc_view_get_visible_geometry(wlc_handle view, struct wlc_geometry *out_geometry
    if (!(v = convert_from_wlc_handle(view, "view")))
       return;
 
-   wlc_view_get_bounds(v, out_geometry, NULL);
+   wlc_view_get_bounds_ptr(v, out_geometry, NULL);
 }
 
 WLC_API void

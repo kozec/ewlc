@@ -138,7 +138,7 @@ surface_under_pointer(struct wlc_pointer *pointer, struct wlc_output *output, st
          continue;
 
       struct wlc_geometry b, v;
-      wlc_view_get_bounds(view, &b, &v);
+      wlc_view_get_bounds_ptr(view, &b, &v);
 
       struct wlc_surface *surface;
       if ((surface = convert_from_wlc_resource(view->surface, "surface"))) {

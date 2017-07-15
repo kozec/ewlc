@@ -7,6 +7,7 @@
 #include <wayland-server.h>
 #include <chck/string/string.h>
 #include "internal.h"
+#include "visibility.h"
 #include "gles2.h"
 #include "render.h"
 #include "platform/context/egl.h"
@@ -789,7 +790,7 @@ view_paint(struct ctx *context, struct wlc_view *view)
    settings.program = (enum program_type)surface->format;
 
    struct wlc_geometry geometry;
-   wlc_view_get_bounds(view, &geometry, &settings.visible);
+   wlc_view_get_bounds_ptr(view, &geometry, &settings.visible);
    surface_paint_internal(context, surface, &geometry, &settings);
 
    if (DRAW_OPAQUE) {

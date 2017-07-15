@@ -295,7 +295,7 @@ render_view(struct wlc_output *output, struct wlc_view *view, struct chck_iter_p
    wlc_render_view_paint(&output->render, &output->context, view);
 
    struct wlc_geometry b;
-   wlc_view_get_bounds(view, &b, NULL);
+   wlc_view_get_bounds_ptr(view, &b, NULL);
    subsurfaces_render(output, surface, (struct wlc_coordinate_scale) {1, 1}, callbacks, b.origin);
 
    WLC_INTERFACE_EMIT(view.render.post, convert_to_wlc_handle(view));
