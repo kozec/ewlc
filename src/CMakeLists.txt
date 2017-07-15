@@ -60,6 +60,7 @@ set(sources
    wlc.c
    extended/wlc-wayland.c
    extended/wlc-render.c
+   extended/wlc-surface.c
    )
 
 if (X11_FOUND)

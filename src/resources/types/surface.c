@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <wayland-server.h>
 #include "internal.h"
+#include "wlc/wlc-surface.h"
 #include "surface.h"
 #include "region.h"
 #include "buffer.h"
