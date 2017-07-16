@@ -441,6 +441,10 @@ const struct wlc_geometry* wlc_view_get_geometry(wlc_handle view);
 /** Gets view bounds */
 void wlc_view_get_bounds(wlc_handle view, struct wlc_geometry* b1, struct wlc_geometry* b2);
 
+/** Returns true if specified point is inside of view input region */
+bool wlc_view_point_in_input_region(wlc_handle view, const struct wlc_point *point);
+
+
 /**
  * Get size requested by positioner, as defined in xdg-shell v6.
  * Returns NULL if view has no valid positioner

@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "wlc/geometry.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -14,7 +15,7 @@ struct wlc_surface;
 /** Get list of subsurfaces. Returned array is a direct reference and shouldn't be modified */
 const wlc_resource* wlc_surface_get_subsurface_list_ptr(const wlc_resource surface, size_t *out_memb);
 
-/** Returns surface coordinate scale (weight and height) */
+/** Returns surface size (weight and height) */
 void wlc_surface_get_coordinate_scale(const wlc_resource surface, double out[2]);
 
 /** Returns subsurface position */

@@ -645,6 +645,26 @@ wlc_view_get_bounds(wlc_handle view, struct wlc_geometry* b1, struct wlc_geometr
       b1, b2);
 }
 
+WLC_API bool
+wlc_view_point_in_input_region(wlc_handle view, const struct wlc_point *point)
+{
+   struct wlc_view *v;
+   if (!(v = convert_from_wlc_handle(view, "view")))
+       return false;
+
+   // FIXME: We should handle subsurfaces as well...
+
+   struct wlc_geometry b;
+   wlc_view_get_input(v, &b);
+
+   const struct wlc_geometry geo = {
+      .origin = { .x = point->x, .y = point->y },
+      .size = { .w = 1, .h = 1 }
+   };
+
+   return wlc_geometry_contains(&b, &geo);
+}
+
 WLC_API const struct wlc_size*
 wlc_view_positioner_get_size(wlc_handle view)
 {
