@@ -4,6 +4,7 @@
 #include <wayland-server.h>
 #include <chck/math/math.h>
 #include "internal.h"
+#include "visibility.h"
 #include "pointer.h"
 #include "macros.h"
 #include "seat.h"
@@ -380,6 +381,44 @@ wlc_pointer_motion(struct wlc_pointer *pointer, uint32_t time, bool pass)
 
       wl_pointer_send_motion(wr, time, wl_fixed_from_double(d.x), wl_fixed_from_double(d.y));
    }
+}
+
+WLC_API void
+wlc_view_pointer_motion(wlc_handle view, uint32_t time, const struct wlc_point *point) {
+   struct wlc_pointer *pointer = &wlc_get_compositor()->seat.pointer;
+   struct wlc_output *output = active_output(pointer);
+   struct wlc_pointer_origin d = {0};
+   struct wlc_view *v = convert_from_wlc_handle(view, "view");
+   struct wlc_surface *surface = convert_from_wlc_resource(v->surface, "surface");
+   assert(surface);
+
+   pointer->pos.x = point->x;
+   pointer->pos.y = point->y;
+   wlc_pointer_focus(pointer, surface, &d);
+   wlc_output_schedule_repaint(output);
+
+   wlc_resource *r;
+   chck_iter_pool_for_each(&pointer->focused.resources, r) {
+      struct wl_resource *wr;
+      if (!(wr = wl_resource_from_wlc_resource(*r, "pointer")))
+         continue;
+
+      wl_pointer_send_motion(wr, time, wl_fixed_from_double(d.x), wl_fixed_from_double(d.y));
+   }
+}
+
+WLC_API void
+wlc_view_pointer_button(wlc_handle view, uint32_t time, uint32_t button, enum wlc_button_state state) {
+   struct wlc_pointer *pointer = &wlc_get_compositor()->seat.pointer;
+   // TODO: This ignores view. Like, completly...
+   wlc_pointer_button(pointer, time, button, state);
+}
+
+WLC_API void
+wlc_view_pointer_scroll(wlc_handle view, uint32_t time, uint8_t axis_bits, double amount[2]) {
+   struct wlc_pointer *pointer = &wlc_get_compositor()->seat.pointer;
+   // TODO: This ignores view. Like, completly...
+   wlc_pointer_scroll(pointer, time, axis_bits, amount);
 }
 
 void
