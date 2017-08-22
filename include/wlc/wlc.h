@@ -488,6 +488,8 @@ enum wlc_positioner_constraint_adjustment_bit wlc_view_positioner_get_constraint
 /** Get visible geometry. (what wlc displays) */
 void wlc_view_get_visible_geometry(wlc_handle view, struct wlc_geometry *out_geometry);
 
+void wlc_view_translate_bounds(wlc_handle view, struct wlc_geometry *bounds);
+
 /** Set geometry. Set edges if the geometry change is caused by interactive resize. */
 WLC_NONULL void wlc_view_set_geometry(wlc_handle view, uint32_t edges, const struct wlc_geometry *geometry);
 

@@ -193,15 +193,8 @@ wlc_view_ack_surface_attach(struct wlc_view *view, struct wlc_surface *surface)
 }
 
 void
-wlc_view_get_bounds_ptr(struct wlc_view *view, struct wlc_geometry *out_bounds, struct wlc_geometry *out_visible)
+wlc_view_translate_bounds_ptr(struct wlc_view *view, const struct wlc_surface *surface, struct wlc_geometry *out_bounds)
 {
-   assert(view && out_bounds && out_bounds != out_visible);
-   memcpy(out_bounds, &view->commit.geometry, sizeof(struct wlc_geometry));
-
-   struct wlc_surface *surface;
-   if (!(surface = convert_from_wlc_resource(view->surface, "surface")))
-      return;
-
    if (view->xdg_toplevel && !wlc_size_equals(&view->surface_commit.visible.size, &wlc_size_zero)) {
       // xdg-surface client that draws drop shadows or other stuff.
       struct wlc_geometry v = view->surface_commit.visible;
@@ -219,8 +212,21 @@ wlc_view_get_bounds_ptr(struct wlc_view *view, struct wlc_geometry *out_bounds, 
       out_bounds->size.h += v.size.h * ha;
    }
 
-   // Make sure bounds is never 0x0 w/h
-   wlc_size_max(&out_bounds->size, &(struct wlc_size){ 1, 1 }, &out_bounds->size);
+	// Make sure bounds is never 0x0 w/h
+	wlc_size_max(&out_bounds->size, &(struct wlc_size){ 1, 1 }, &out_bounds->size);
+}
+
+void
+wlc_view_get_bounds_ptr(struct wlc_view *view, struct wlc_geometry *out_bounds, struct wlc_geometry *out_visible)
+{
+   assert(view && out_bounds && out_bounds != out_visible);
+   memcpy(out_bounds, &view->commit.geometry, sizeof(struct wlc_geometry));
+
+   struct wlc_surface *surface;
+   if (!(surface = convert_from_wlc_resource(view->surface, "surface")))
+      return;
+
+   wlc_view_translate_bounds_ptr(view, surface, out_bounds);
 
    if (!out_visible)
       return;
@@ -729,6 +735,22 @@ wlc_view_get_visible_geometry(wlc_handle view, struct wlc_geometry *out_geometry
       return;
 
    wlc_view_get_bounds_ptr(v, out_geometry, NULL);
+}
+
+WLC_API void
+wlc_view_translate_bounds(wlc_handle view, struct wlc_geometry *bounds)
+{
+   assert(bounds);
+
+   struct wlc_view *v;
+   if (!(v = convert_from_wlc_handle(view, "view")))
+      return;
+
+   struct wlc_surface *surface;
+   if (!(surface = convert_from_wlc_resource(v->surface, "surface")))
+      return;
+
+   wlc_view_translate_bounds_ptr(v, surface, bounds);
 }
 
 WLC_API void
